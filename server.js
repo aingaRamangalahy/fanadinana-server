@@ -1,28 +1,25 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const config = require("./config");
+const cors = require("cors");
 
 const app = express();
 
 const port = config.SERVER_PORT || 9000;
 
 //define routes
+const userRoutes = require("./src/routes/user.route");
+const authRoutes = require("./src/routes/auth.route")
 
 // config
-this.app.use(bodyParser.json({ limit: "50mb" }));
-this.app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
-this.app.use(cors());
+app.use(bodyParser.json({ limit: "50mb" }));
+app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
+app.use(cors());
 
-// root route
-app.use("/", (req, res) => {
-  res.json({
-    success: true,
-    message: "api working",
-  });
-});
 
 // mount routes
-
+app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/users", userRoutes);
 // start server
 app.listen(port, () => {
   console.log(`Server is listening on port ${port}`);
