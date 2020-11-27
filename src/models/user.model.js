@@ -38,7 +38,7 @@ User.create = function (newUser) {
 
 User.findById = function (id, result) {
   return new Promise(function (resolve, reject) {
-    dbConn.query("Select * from user where id = ? ", id, function (err, res) {
+    dbConn.query("Select * from user where id_user = ? ", id, function (err, res) {
       if (err) {
         console.log("error: ", err);
         return reject(err);
