@@ -1,59 +1,38 @@
 const User = require("../models/user.model");
 
-exports.findAll = function (req, res) {
-  User.findAll(function (err, user) {
-    console.log("controller");
-    if (err) {
-      res.json({
-        success: false,
-        message: err,
-      });
-    }
-    console.log("res", user);
+exports.findAll = async function (req, res) {
+  try {
+    const users = await User.findAll();
     res.json({
       success: true,
-      data: user,
+      data: users,
     });
-  });
-};
-
-exports.create = function (req, res) {
-  const newUser = new User(req.body);
-
-  //handles null error
-  if (req.body.constructor === Object && Object.keys(req.body).length === 0) {
-    res
-      .status(400)
-      .send({ success: false, message: "Please provide all required field" });
-  } else {
-    User.create(newUser, function (err, user) {
-      if (err) {
-        res.json({
-          success: false,
-          message: err,
-        });
-      }
-      res.json({
-        error: false,
-        message: "User added successfully!",
-        data: user,
-      });
+  } catch (error) {
+    res.json({
+      success: false,
+      message: error,
     });
   }
 };
 
-exports.login = function (req, res) {
-  const { login, password } = req.body;
-  User.login(login, password, function (err, user) {
-    if (err) {
-      res.json({
-        success: false,
-        message: err,
-      });
+exports.create = async function (req, res) {
+  try {
+    const newUser = new User(req.body);
+    //handles null error
+    if (req.body.constructor === Object && Object.keys(req.body).length === 0) {
+      throw "Please provide all required field";
     }
+    const userId = await User.create(newUser);
+
     res.json({
       success: true,
-      data: user,
+      message: "User added successfully!",
+      data: userId,
     });
-  });
+  } catch (error) {
+    res.json({
+      success: false,
+      message: error,
+    });
+  }
 };

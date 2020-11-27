@@ -29,8 +29,8 @@ User.create = function (newUser) {
         console.log("error: ", err);
         return reject(err);
       } else {
-        console.log(res);
-        return resolve(res);
+        console.log(res.insertId);
+        return resolve(res.insertId);
       }
     });
   });
@@ -51,7 +51,7 @@ User.findById = function (id, result) {
 
 User.findAll = function (result) {
   return new Promise(function (resolve, reject) {
-    dbConn.query("Select * from user ", function (err, res) {
+    dbConn.query("Select id_user, login from user ", function (err, res) {
       if (err) {
         console.log("error: ", err);
         return reject(err);
